@@ -1,0 +1,40 @@
+📅 PLAN GENERAL DEL PROYECTO – ACTUALIZADO
+✅ Fase 1: MVP (Mínimo Producto Viable)
+Backend básico con Flask
+Frontend simple con React + TypeScript
+Selector de directorio y carga de archivos .sql
+Editor de SQL funcional (Monaco Editor)
+Diagrama vacío (placeholder con React Flow)
+Panel explorador de archivos (Tree View)
+✅ Fase 2: Parsing y Visualización Básica
+Parser básico de SQL (detecta IF, WHILE, SELECT, etc.)
+Conversión de código a nodos lógicos
+Integración básica con React Flow
+Visualización de nodos simples
+Sistema de tipos de nodos base:
+start, end, select, if, table, join, etc.
+✅ Fase 3: Edición Bidireccional
+Modificación de nodos → actualiza el código SQL
+Arrastrar y soltar componentes desde sidebar
+Soporte para bloques anidados (BEGIN...END)
+Guardar cambios en archivo original o nuevo
+✅ Fase 4: Conexión y Ejecución en SQL Server
+Configuración de conexión a SQL Server (pyodbc)
+Endpoint para validar conexión
+Formulario de parámetros de entrada para SPs
+Inyección automática de tracepoints (PRINT) en el SP
+Ejecutar SP desde backend y capturar logs/resultados
+✅ Fase 5: Debug Visual Paso a Paso
+Sistema de logs basado en tracepoints
+Resaltado de nodos al ejecutarse
+Visualización de resultados intermedios
+Globos animados sobre nodos del diagrama
+Historial de pasos ejecutados
+Soporte para variables locales y globales
+✅ Fase 6: Persistencia y Mejoras Avanzadas
+Guardar proyectos y diagramas en JSON
+Exportar/importar diagramas y SPs
+Validaciones de sintaxis SQL
+Autocompletado y sugerencias en editor
+Soporte multiusuario (opcional)
+Despliegue local o web (Docker/Nginx)
