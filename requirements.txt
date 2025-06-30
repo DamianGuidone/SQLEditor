@@ -1,0 +1,4 @@
+flask
+flask-cors
+python-dotenv
+pyodbc    # Lo usaremos más adelante para SQL Server
