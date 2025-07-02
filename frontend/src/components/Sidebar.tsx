@@ -1,82 +1,186 @@
 import React, { useState, useEffect } from 'react';
-import useLocalStorageState from 'use-local-storage-state';
+import { Box, Tabs, Tab, } from '@mui/material';
 
-interface SidebarProps {
-    title: string;
+interface SidebarTabProps {
+    icon: React.ReactNode;
     children: React.ReactNode;
-    defaultWidth?: number;
-    isExpanded: boolean;
-    toggleExpand: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ 
-        title, 
-        children, 
-        defaultWidth = 300, 
-        isExpanded, 
-        toggleExpand  
-    }) => {
-    const [width, setWidth] = useLocalStorageState<number>('sidebar-width', {defaultValue: 100});
+interface SidebarProps {
+    tabs: SidebarTabProps[];
+    position: 'left' | 'right';
+    id: string; // Identificador único para cada sidebar
+}
 
-    const handleResize = (event: React.MouseEvent<HTMLDivElement>) => {
-        event.preventDefault();
-        const mouseMoveHandler = (e: MouseEvent) => {
-            if (e.clientX < 200 || e.clientX > window.innerWidth - 200) return;
+const Sidebar: React.FC<SidebarProps> = ({ tabs, position, id }) => {
+    // Usamos el id para hacer únicas las keys en localStorage
+    const [tabValue, setTabValue] = useState<number>(() => {
+        const saved = localStorage.getItem(`sidebar-${id}-tab`);
+        return saved ? parseInt(saved) : 0;
+    });
 
-            setWidth(e.clientX);
+    const [isPanelVisible, setIsPanelVisible] = useState<boolean>(() => {
+        const saved = localStorage.getItem(`sidebar-${id}-visible`);
+        return saved ? JSON.parse(saved) : true;
+    });
+
+    const [panelWidth, setPanelWidth] = useState<number>(() => {
+        const saved = localStorage.getItem(`sidebar-${id}-width`);
+        return saved ? parseInt(saved) : 300;
+    });
+
+    // Persistencia independiente para cada sidebar
+    useEffect(() => {
+        localStorage.setItem(`sidebar-${id}-tab`, tabValue.toString());
+        localStorage.setItem(`sidebar-${id}-visible`, JSON.stringify(isPanelVisible));
+        localStorage.setItem(`sidebar-${id}-width`, panelWidth.toString());
+    }, [tabValue, isPanelVisible, panelWidth, id]);
+    
+    const [isResizing, setIsResizing] = useState<boolean>(false);
+
+    useEffect(() => {
+        const handleMouseMove = (e: MouseEvent) => {
+            if (!isResizing) return;
+
+            const newWidth = position === 'left' 
+                ? e.clientX 
+                : window.innerWidth - e.clientX;
+
+            // Limites mínimos y máximos
+            const minWidth = 200;
+            const maxWidth = 500;
+            
+            if (newWidth >= minWidth && newWidth <= maxWidth) {
+                setPanelWidth(newWidth);
+            }
         };
 
-        const mouseUpHandler = () => {
-            document.removeEventListener('mousemove', mouseMoveHandler);
-            document.removeEventListener('mouseup', mouseUpHandler);
-        };
+        const handleMouseUp = () => setIsResizing(false);
 
-        document.addEventListener('mousemove', mouseMoveHandler);
-        document.addEventListener('mouseup', mouseUpHandler);
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUp);
+
+        return () => {
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('mouseup', handleMouseUp);
+        };
+    }, [isResizing, position]);
+
+    const handleTabClick = (index: number) => {
+        if (index === tabValue && isPanelVisible) {
+            setIsPanelVisible(false); // Ocultar panel
+        } else {
+            setTabValue(index); // Cambiar pestaña
+            if (!isPanelVisible) {
+                setIsPanelVisible(true); // Mostrar panel si estaba oculto
+            }
+        }
     };
 
     return (
-        <div
-            style={{
-                display: isExpanded ? 'flex' : 'none',
+        <Box sx={{
+            display: 'flex',
+            height: '100%',
+            position: 'relative',
+            flexDirection: id === 'right' ? 'row-reverse' : 'row',
+            flexShrink: 0 // Importante para evitar que el sidebar crezca
+        }}>
+            {/* Columna de pestañas */}
+            <Box sx={{
+                width: '60px',
+                flexShrink: 0,
+                borderRight: id === 'right' ? 'none' : '1px solid #333',
+                borderLeft: id === 'right' ? '1px solid #333' : 'none',
+                backgroundColor: '#2d2f31',
+                display: 'flex',
                 flexDirection: 'column',
-                width: `${width}px`,
-                borderRight: '1px solid #ccc',
-                overflowY: 'auto',
-                position: 'relative'
-            }}
-        >
-        {/* Título del sidebar */}
-        <div
-            style={{
-                padding: '1rem',
-                borderBottom: '1px solid #ccc',
-                cursor: 'pointer'
-            }}
-            onClick={toggleExpand}
-        >
-            {title} {isExpanded ? '<<' : '>>'}
-        </div>
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                overflowY: 'auto'
+            }}>
+                <Tabs
+                    orientation="vertical"
+                    value={tabValue}
+                    aria-label="Vertical tabs example"
+                    variant="scrollable"
+                    sx={{
+                        '& .MuiTab-root': {
+                        minHeight: '48px',
+                        minWidth: '48px',
+                        borderRadius: '0',
+                        padding: '12px 0',
+                        color: '#9ca0a4',
+                        '&.Mui-selected': id === 'left' ? { color: '#fff', borderLeft: '5px solid #569cd6', backgroundColor: '#1e1e1e' }
+                                                        : { color: '#fff', borderRight: '5px solid #569cd6', backgroundColor: '#1e1e1e' },
+                        '&:hover': {
+                            background: '#333',
+                            color: '#fff'
+                        }
+                        },
+                        '& .MuiTabs-indicator': id === 'left' ?  { left: 0, width: '5px', backgroundColor: '#569cd6' }
+                                                                : { right: 0, width: '5px', backgroundColor: '#569cd6' }
+                    }}
+                >
+                {tabs.map((tab, index) => (
+                    <Tab
+                        key={index}
+                        icon={tab.icon as React.ReactElement}
+                        iconPosition="start"
+                        {...a11yProps(index)}
+                        onClick={() => handleTabClick(index)}
+                    />
+                ))}
+                </Tabs>
+            </Box>
 
-        {/* Contenido del sidebar */}
-        <div style={{ flex: 1, padding: '1rem' }}>{children}</div>
+            {/* Panel de contenido */}
+            {isPanelVisible && tabValue !== null && (
+            <Box
+                sx={{
+                    width: `${panelWidth}px`,
+                    flexShrink: 0,
+                    borderRight: id === 'left' ? '1px solid #333' : 'none',
+                    borderLeft: id === 'right' ? '1px solid #333' : 'none',
+                    backgroundColor: '#1e1e1e',
+                    overflowY: 'auto',
+                    position: 'relative',
+                    height: '100%' // Asegura que ocupe toda la altura
+                }}
+            >
+                <div style={{ padding: '1rem' }}>
+                    {tabs[tabValue]?.children}
+                </div>
 
-        {/* Resizer */}
-        <div
-            style={{
-                width: '5px',
-                cursor: 'col-resize',
-                background: '#ccc',
-                position: 'absolute',
-                right: 0,
-                top: 0,
-                bottom: 0,
-                zIndex: 1000
-            }}
-            onMouseDown={handleResize}
-        />
-        </div>
+                {/* Divisor de redimensionamiento */}
+                <Box
+                    onMouseDown={() => setIsResizing(true)}
+                    sx={{
+                        position: 'absolute',
+                        left: id === 'right' ? 0 : undefined,
+                        right: id === 'left' ? 0 : undefined,
+                        top: 0,
+                        bottom: 0,
+                        width: '5px',
+                        bgcolor: '#555',
+                        cursor: 'col-resize',
+                        zIndex: 1000,
+                        opacity: isResizing ? 1 : 0.4,
+                        transition: 'opacity 0.2s ease',
+                        '&:hover': { opacity: 0.8 }
+                    }}
+                />
+            </Box>
+            )}
+
+        </Box>
     );
 };
+
+function a11yProps(index: number) {
+    return {
+        id: `vertical-tab-${index}`,
+        'aria-controls': `vertical-tabpanel-${index}`
+    };
+}
 
 export default Sidebar;

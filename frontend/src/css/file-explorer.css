@@ -1,0 +1,164 @@
+/* file-explorer.css */
+.file-explorer-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #2d2f31;
+    color: #e0e0e0;
+    padding: 1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.file-explorer-header {
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #444;
+    padding-bottom: 0.5rem;
+}
+
+.search-box {
+    position: relative;
+    margin: 0.5rem 0;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 0.5rem 1.5rem 0.5rem 2rem;
+    background: #1e1e1e;
+    border: 1px solid #444;
+    border-radius: 4px;
+    color: #fff;
+}
+
+.search-icon {
+    position: absolute;
+    left: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca0a4;
+}
+
+.clear-search {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #9ca0a4;
+    cursor: pointer;
+}
+
+.quick-access, .favorites-section {
+    margin: 0.5rem 0;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #444;
+}
+
+.quick-access-list, .favorites-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.5rem 0;
+}
+
+.quick-access-item, .favorite-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.quick-access-item:hover, .favorite-item:hover {
+    background: #3d3f41;
+}
+
+.path-input-container {
+    display: flex;
+    gap: 0.5rem;
+    margin: 0.5rem 0;
+}
+
+.path-input-container input {
+    flex: 1;
+    padding: 0.5rem;
+    background: #1e1e1e;
+    border: 1px solid #444;
+    border-radius: 4px;
+    color: #fff;
+}
+
+.load-button {
+    padding: 0.5rem 1rem;
+    background: #569cd6;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+}
+
+.load-button:disabled {
+    background: #3a6d99;
+    cursor: not-allowed;
+}
+
+.error-message {
+    color: #ff6b6b;
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+}
+
+.file-tree-container {
+    flex: 1;
+    overflow-y: auto;
+    margin-top: 0.5rem;
+}
+
+.file-node-container {
+    margin: 0.1rem 0;
+}
+
+.file-node {
+    display: flex;
+    align-items: center;
+    padding: 0.3rem 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.file-node:hover {
+    background: #3d3f41;
+}
+
+.file-icon {
+    margin-right: 0.5rem;
+    width: 1.2rem;
+    color: #569cd6;
+}
+
+.file-name {
+    flex: 1;
+}
+
+.favorite-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #9ca0a4;
+    padding: 0.2rem;
+}
+
+.file-children {
+    margin-left: 1rem;
+    border-left: 1px dashed #444;
+}
+
+.empty-state {
+    padding: 1rem;
+    text-align: center;
+    color: #9ca0a4;
+    font-style: italic;
+}

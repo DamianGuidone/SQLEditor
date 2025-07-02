@@ -1,51 +1,73 @@
-import React, { useState } from 'react';
-import logo from './logo.svg';
-import useLocalStorageState from 'use-local-storage-state';
-import FileExplorer from './components/FileExplorer';
-import EditorSQL from './components/EditorSQL';
+
+import React from 'react';
 import Sidebar from './components/Sidebar';
-import './App.css';
+import FileExplorer from './components/FileExplorer';
+import EditorTabs from './components/EditorTabs';
+import ToolEditor from './components/ToolEditor';
+import { Box } from '@mui/material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFolderOpen, faTerminal, faCog, faPuzzlePiece, faSave } from '@fortawesome/free-solid-svg-icons';
 
 const App: React.FC = () => {
-  const [selectedFile, setSelectedFile] = useState<string | null>(null);
-  const [isExpanded, setIsExpanded] = useLocalStorageState<boolean>('sidebar-expanded', {defaultValue: true});
+  const [selectedFile, setSelectedFile] = React.useState<string | null>(null);
 
-  const toggleExpand = () => {
-    setIsExpanded(!isExpanded);
-  };
+  const sidebarTabs = [
+    {
+      icon: <FontAwesomeIcon icon={faFolderOpen} />,
+      children: <FileExplorer onSelectFile={setSelectedFile} />
+    },
+    {
+      icon: <FontAwesomeIcon icon={faTerminal} />,
+      children: <div>Contenido de log</div>
+    },
+    {
+      icon: <FontAwesomeIcon icon={faCog} />,
+      children: <div>Contenido de configuración</div>
+    }
+  ];
 
-  return (    
-    <div style={{ display: 'flex', height: '100vh' }}>
-      {/* Sidebar con explorador de archivos */}
-      <Sidebar 
-        title="Explorador"
-        isExpanded={isExpanded}
-        toggleExpand={toggleExpand}
-        defaultWidth={300}>
-        <FileExplorer onSelectFile={setSelectedFile} />
-      </Sidebar>
+  const toolTabs = [
+    {
+      icon: <FontAwesomeIcon icon={faPuzzlePiece} />,
+      children: <ToolEditor onDragStart={() => {}} />
+    },
+    {
+      icon: <FontAwesomeIcon icon={faSave} />,
+      children: <div>Guardado automático</div>
+    }
+  ];
 
-      {/* Botón para mostrar el sidebar cuando está oculto */}
-      {!isExpanded && (
-        <button
-          style={{ animation: !isExpanded ? 'fadeIn 0.3s ease forwards' : 'none' }}
-          className="sidebar-toggle-button"
-          onClick={toggleExpand}
-          aria-label="Mostrar explorador"
-        >🏸
-        </button>
-      )}
-
-      <div style={{ flex: 1, padding: '1rem' }}>
-        {selectedFile ? (
-          <EditorSQL selectedFile={selectedFile} />
-        ) : (
-          <div style={{ padding: '2rem', textAlign: 'center' }}>
-            <h2>Selecciona un archivo para ver su contenido</h2>
-          </div>
-        )}
-      </div>
-    </div>
+  return (
+    <Box sx={{
+      display: 'flex',
+      height: '100vh',
+      width: '100vw',
+      overflow: 'hidden'
+    }}>
+      {/* Sidebar izquierdo – Explorador de archivos */}
+      <Sidebar tabs={sidebarTabs} position='left' id="left" />
+      
+      {/* Contenedor principal con editor y sidebar derecho */}
+      <Box sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        flex: 1,
+        minWidth: 0, // Importante para evitar desbordamiento
+      }}>
+        {/* Editor central */}
+        <Box sx={{
+          flex: 1,
+          minWidth: 0, // Importante para evitar desbordamiento
+          overflow: 'hidden'
+        }}>
+          <EditorTabs tabs={[]} activeTabPath={''} />
+        </Box>
+        
+        {/* Sidebar derecho – Herramientas */}
+        <Sidebar tabs={toolTabs} position='right' id="right" />
+      </Box>
+    </Box>
   );
 };
+
 export default App;
