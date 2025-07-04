@@ -26,7 +26,7 @@ const Sidebar: React.FC<SidebarProps> = ({ tabs, position, id }) => {
 
     const [panelWidth, setPanelWidth] = useState<number>(() => {
         const saved = localStorage.getItem(`sidebar-${id}-width`);
-        return saved ? parseInt(saved) : 300;
+        return saved ? parseInt(saved) : 500;
     });
 
     // Persistencia independiente para cada sidebar
@@ -48,7 +48,7 @@ const Sidebar: React.FC<SidebarProps> = ({ tabs, position, id }) => {
 
             // Limites mínimos y máximos
             const minWidth = 200;
-            const maxWidth = 500;
+            const maxWidth = 1000;
             
             if (newWidth >= minWidth && newWidth <= maxWidth) {
                 setPanelWidth(newWidth);
