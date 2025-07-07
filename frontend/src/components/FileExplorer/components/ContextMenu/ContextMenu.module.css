@@ -1,0 +1,28 @@
+.contextMenu {
+    position: fixed;
+    background-color: #252526;
+    border: 1px solid #454545;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    min-width: 180px;
+}
+
+.menuItem {
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.menuItem:hover {
+    background-color: #37373d;
+    color: #007acc;
+}
+
+.menuIcon {
+    margin-right: 8px;
+    width: 16px;
+    text-align: center;
+}

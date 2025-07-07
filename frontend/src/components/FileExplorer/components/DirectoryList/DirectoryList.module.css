@@ -1,0 +1,25 @@
+.directoryList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.listItem {
+    padding: 4px 8px;
+    margin: 2px 0;
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.listItem:hover {
+    background-color: #3c3c3c;
+}
+
+.emptyMessage {
+    color: #858585;
+    font-style: italic;
+    padding: 8px;
+    text-align: center;
+}

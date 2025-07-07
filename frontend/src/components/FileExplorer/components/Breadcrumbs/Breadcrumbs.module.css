@@ -1,0 +1,27 @@
+.breadcrumbs {
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+    background-color: #252526;
+    border-radius: 4px;
+    flex: 1;
+    overflow: hidden;
+}
+
+.crumb {
+    white-space: nowrap;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 2px;
+    transition: background-color 0.2s;
+}
+
+.crumb:hover {
+    background-color: #3c3c3c;
+    color: #007acc;
+}
+
+.separator {
+    color: #858585;
+    padding: 0 4px;
+}

@@ -1,0 +1,103 @@
+.chartContainer {
+    flex: 1;
+    background-color: #252526;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.chartToolbar {
+    padding: 8px;
+    background-color: #2d2d2d;
+    display: flex;
+    gap: 8px;
+    border-bottom: 1px solid #1e1e1e;
+}
+
+.chartToolbar button {
+    background-color: #3c3c3c;
+    border: none;
+    color: #e0e0e0;
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.chartToolbar button:hover {
+    background-color: #007acc;
+    transform: scale(1.1);
+}
+
+.chartArea {
+    flex: 1;
+    position: relative;
+}
+
+.graphPlaceholder {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #858585;
+    width: 80%;
+}
+
+.graphPlaceholder p {
+    margin: 8px 0;
+}
+
+.sqlPreview {
+    background-color: #1e1e1e;
+    padding: 8px;
+    border-radius: 4px;
+    margin-top: 16px;
+    text-align: left;
+    max-height: 100px;
+    overflow: hidden;
+}
+
+.sqlPreview pre {
+    margin: 0;
+    font-family: monospace;
+    font-size: 12px;
+}
+
+.emptyChart {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #858585;
+    width: 80%;
+}
+
+.emptyChartIcon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    color: #569cd6;
+}
+
+.generateButton {
+    background-color: #007acc;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    margin-top: 16px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.generateButton:hover {
+    background-color: #0062a3;
+}

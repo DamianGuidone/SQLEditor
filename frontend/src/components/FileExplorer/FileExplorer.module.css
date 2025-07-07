@@ -1,0 +1,71 @@
+.fileExplorerContainer {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background-color: #252526;
+    border-bottom: 1px solid #1e1e1e;
+}
+
+.refreshButton {
+    background: none;
+    border: none;
+    color: #e0e0e0;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-left: auto;
+}
+
+.refreshButton:hover {
+    background-color: #3c3c3c;
+}
+
+.explorerContent {
+    display: flex;
+    height: calc(100% - 40px);
+    overflow: hidden;
+}
+
+.favoritesSection {
+    width: 220px;
+    border-right: 1px solid #1e1e1e;
+    overflow-y: auto;
+    padding: 8px;
+    background-color: #252526;
+}
+
+.sectionTitle {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #858585;
+    margin: 8px 0;
+    padding-left: 8px;
+}
+
+.mainSection {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+}
+
+.loading {
+    padding: 16px;
+    text-align: center;
+    color: #858585;
+}
+
+.error {
+    padding: 16px;
+    text-align: center;
+    color: #f48771;
+}

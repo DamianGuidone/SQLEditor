@@ -1,0 +1,96 @@
+.pickerContainer {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    color: #e0e0e0;
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.options {
+    display: flex;
+    gap: 20px;
+    flex: 1;
+}
+
+.dropArea {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #3c3c3c;
+    border-radius: 8px;
+    padding: 40px;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.dropArea.active {
+    border-color: #007acc;
+    background-color: rgba(0, 122, 204, 0.1);
+}
+
+.dropIcon {
+    font-size: 48px;
+    color: #569cd6;
+    margin-bottom: 16px;
+}
+
+.browseButton {
+    background-color: #007acc;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    margin-top: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.browseButton:hover {
+    background-color: #0062a3;
+}
+
+.predefined {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.directoryList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.directoryItem {
+    padding: 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.directoryItem:hover {
+    background-color: #3c3c3c;
+}
+
+.directoryButton {
+    background: none;
+    border: none;
+    color: #e0e0e0;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px;
+}

@@ -1,0 +1,30 @@
+.accordion {
+    margin-bottom: 12px;
+    border: 1px solid #3c3c3c;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.header {
+    padding: 10px 15px;
+    background-color: #252526;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.header:hover {
+    background-color: #2a2d2e;
+}
+
+.header i {
+    font-size: 12px;
+    color: #858585;
+}
+
+.content {
+    background-color: #1e1e1e;
+    padding: 8px;
+}

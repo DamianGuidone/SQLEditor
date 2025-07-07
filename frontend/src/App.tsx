@@ -1,20 +1,28 @@
 
 import React from 'react';
-import Sidebar from './components/Sidebar';
-import FileExplorer from './components/FileExplorer';
-import EditorTabs from './components/EditorTabs';
+import Sidebar from './components/Sidebar/Sidebar';
+import FileExplorer from './components/FileExplorer/FileExplorer';
+import EditorTabs from './components/EditorGrafico/EditorTabs';
+import { FileExplorerProvider } from './components/FileExplorer/contexts/FileExplorerContext';
 import ToolEditor from './components/ToolEditor';
 import { Box } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFolderOpen, faTerminal, faCog, faPuzzlePiece, faSave } from '@fortawesome/free-solid-svg-icons';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+//import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const App: React.FC = () => {
-  const [selectedFile, setSelectedFile] = React.useState<string | null>(null);
 
   const sidebarTabs = [
     {
       icon: <FontAwesomeIcon icon={faFolderOpen} />,
-      children: <FileExplorer onSelectFile={setSelectedFile} />
+      children: <div style={{ height: '100vh', padding: '20px' }}>
+                  <h1>Explorador de Archivos</h1>
+                  <DndProvider backend={HTML5Backend}>
+                    <FileExplorer />
+                  </DndProvider>
+                </div>
     },
     {
       icon: <FontAwesomeIcon icon={faTerminal} />,
@@ -38,35 +46,37 @@ const App: React.FC = () => {
   ];
 
   return (
-    <Box sx={{
-      display: 'flex',
-      height: '100vh',
-      width: '100vw',
-      overflow: 'hidden'
-    }}>
-      {/* Sidebar izquierdo – Explorador de archivos */}
-      <Sidebar tabs={sidebarTabs} position='left' id="left" />
-      
-      {/* Contenedor principal con editor y sidebar derecho */}
+    <FileExplorerProvider>
       <Box sx={{
         display: 'flex',
-        flexDirection: 'row',
-        flex: 1,
-        minWidth: 0, // Importante para evitar desbordamiento
+        height: '100vh',
+        width: '100vw',
+        overflow: 'hidden'
       }}>
-        {/* Editor central */}
+        {/* Sidebar izquierdo – Explorador de archivos */}
+        <Sidebar tabs={sidebarTabs} position='left' id="left" />
+        
+        {/* Contenedor principal con editor y sidebar derecho */}
         <Box sx={{
+          display: 'flex',
+          flexDirection: 'row',
           flex: 1,
           minWidth: 0, // Importante para evitar desbordamiento
-          overflow: 'hidden'
         }}>
-          <EditorTabs tabs={[]} activeTabPath={''} />
+          {/* Editor central */}
+          <Box sx={{
+            flex: 1,
+            minWidth: 0, // Importante para evitar desbordamiento
+            overflow: 'hidden'
+          }}>
+            <EditorTabs />
+          </Box>
+          
+          {/* Sidebar derecho – Herramientas */}
+          <Sidebar tabs={toolTabs} position='right' id="right" />
         </Box>
-        
-        {/* Sidebar derecho – Herramientas */}
-        <Sidebar tabs={toolTabs} position='right' id="right" />
       </Box>
-    </Box>
+    </FileExplorerProvider>
   );
 };
 

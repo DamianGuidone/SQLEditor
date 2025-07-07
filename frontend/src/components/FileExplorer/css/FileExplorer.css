@@ -1,0 +1,237 @@
+/* Tema oscuro principal */
+:root {
+  --bg-color: #1e1e1e;
+  --bg-secondary: #2d2d2d;
+  --text-color: #e0e0e0;
+  --text-secondary: #a0a0a0;
+  --accent-color: #569cd6;
+  --hover-color: #3d3f41;
+  --border-color: #444;
+  --error-color: #ff6b6b;
+  --favorite-color: #ffd700;
+}
+
+.file-explorer {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border-color);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Drag and drop */
+.file-explorer.drag-over {
+  background-color: var(--hover-color);
+  outline: 2px dashed var(--accent-color);
+}
+
+/* Header */
+.explorer-header {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  gap: 8px;
+}
+
+.current-path {
+  flex: 1;
+  font-size: 0.9em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Secciones */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-weight: bold;
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.favorites-section {
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Items */
+.file-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.file-item:hover {
+  background-color: var(--hover-color);
+}
+
+.file-icon {
+  width: 20px;
+  color: var(--accent-color);
+}
+
+.file-name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-actions {
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.file-item:hover .file-actions {
+  opacity: 1;
+}
+
+.file-actions button {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.file-actions button:hover {
+  color: var(--text-color);
+  background-color: var(--bg-secondary);
+}
+
+.favorite {
+  color: var(--favorite-color) !important;
+}
+
+/* Formularios */
+.new-item-form {
+  display: flex;
+  padding: 8px 12px;
+  gap: 8px;
+  background-color: var(--bg-secondary);
+}
+
+.new-item-form input {
+  flex: 1;
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+/* Estados */
+.loading, .empty, .error {
+  padding: 12px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.error {
+  color: var(--error-color);
+}
+
+.first-run {
+  text-align: center;
+  padding: 2rem;
+  color: #888;
+}
+
+.first-run p {
+  margin: 1rem 0;
+}
+
+.primary-button {
+  background-color: #4a9ff5;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.primary-button:hover {
+  background-color: #3a8ee5;
+}
+
+.change-directory {
+  background-color: transparent;
+  border: none;
+  color: #4a9ff5;
+  cursor: pointer;
+  padding: 5px 8px;
+  border-radius: 3px;
+  transition: all 0.2s;
+}
+
+.change-directory:hover {
+  background-color: rgba(74, 159, 245, 0.1);
+}
+
+.current-path {
+  flex-grow: 1;
+  padding: 0 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.current-path:hover {
+  text-decoration: underline;
+}
+
+.directory-picker-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  background: #2a2d2e;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #444;
+}
+
+.breadcrumbs select {
+  background: #333;
+  color: #fff;
+  border: 1px solid #555;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.breadcrumbs .separator {
+  margin: 0 5px;
+  color: #777;
+}

@@ -1,7 +1,18 @@
 import os
 from flask import Blueprint, request, jsonify
+import tkinter as tk
+import shutil
+from tkinter import filedialog
 
 file_bp = Blueprint('file', 'file')
+BASE_DIR = 'D:/Damian/ProyectoPuebasDGUIDONE/Empresas'
+# Configuración de rutas permitidas
+ALLOWED_BASE_PATHS = {
+    'projects': 'D:/Damian/ProyectoPuebasDGUIDONE/Empresas',
+    'shared': 'D:/Damian/ProyectoPuebasDGUIDONE/Empresas',
+    'uploads': 'D:/Damian/ProyectoPuebasDGUIDONE/Empresas'
+}
+
 
 @file_bp.route('/list_sql_files', methods=['POST'])
 def list_sql_files():
@@ -83,30 +94,97 @@ def get_sql_file():
     from flask import Flask, request, jsonify
 import os
 
-UPLOAD_FOLDER = 'uploads'
-file_bp.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-@file_bp.route('/upload', methods=['POST'])
-def upload_file():
-    if 'files' not in request.files:
-        return jsonify({'error': 'No file part'}), 400
     
-    files = request.files.getlist('files')
-    for file in files:
-        if file.filename == '':
-            continue
-        file.save(os.path.join(file_bp.config['UPLOAD_FOLDER'], file.filename))
+@file_bp.route('/api/files', methods=['GET'])
+def get_files():
+    path = request.args.get('path', '')
+    full_path = os.path.join(BASE_DIR, path)
     
-    return jsonify({'message': 'Files uploaded successfully'}), 200
-
-@file_bp.route('/files', methods=['GET'])
-def list_files():
-    files = []
-    for filename in os.listdir(file_bp.config['UPLOAD_FOLDER']):
-        path = os.path.join(file_bp.config['UPLOAD_FOLDER'], filename)
-        if os.path.isfile(path):
-            files.append({
-                'name': filename,
-                'size': os.path.getsize(path)
+    if not os.path.exists(full_path):
+        return jsonify({'error': 'Directory not found'}), 404
+    
+    try:
+        items = []
+        for item in os.listdir(full_path):
+            item_path = os.path.join(full_path, item)
+            items.append({
+                'name': item,
+                'path': os.path.relpath(item_path, BASE_DIR),
+                'isDirectory': os.path.isdir(item_path),
+                'type': 'sql' if item.endswith('.sql') else 'sqlg' if item.endswith('.sqlg') else None
             })
-    return jsonify(files)
+        return jsonify({'files': items, 'currentPath': path})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@file_bp.route('/api/operations', methods=['POST'])
+def handle_operations():
+    data = request.json
+    operation = data.get('operation')
+    path = data.get('path')
+    new_name = data.get('new_name')
+    
+    try:
+        full_path = os.path.join(BASE_DIR, path)
+        
+        if operation == 'delete':
+            if os.path.isdir(full_path):
+                shutil.rmtree(full_path)
+            else:
+                os.remove(full_path)
+        elif operation == 'rename':
+            new_path = os.path.join(os.path.dirname(full_path), new_name)
+            os.rename(full_path, new_path)
+        elif operation == 'create_dir':
+            os.makedirs(full_path, exist_ok=True)
+        elif operation == 'create_file':
+            with open(full_path, 'w') as f:
+                f.write('')
+        
+        return jsonify({'success': True})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@file_bp.route('/api/select-directory', methods=['GET'])
+def select_directory():
+    # Esto sería para administradores configurar el BASE_DIR
+    # En producción usaría autenticación aquí
+    return jsonify({
+        'available_directories': ['/projects', '/shared', '/user-uploads']
+    })
+
+
+@file_bp.route('/api/directories', methods=['GET'])
+def list_root_directories():
+    print("Solicitud de directorios raíz recibida")
+    try:
+        # Estructura consistente con axios/React expectations
+        return jsonify({
+            'data': {
+                'directories': list(ALLOWED_BASE_PATHS.keys())
+            }
+        })
+    except Exception as e:
+        print("Error en list_root_directories:", str(e))
+        return jsonify({
+            'error': str(e)
+        }), 500
+
+@file_bp.route('/api/directories/<base_path>', methods=['GET'])
+def list_subdirectories(base_path):
+    if base_path not in ALLOWED_BASE_PATHS:
+        return jsonify({'error': 'Base path not allowed'}), 400
+    
+    path = request.args.get('path', '')
+    full_path = os.path.join(ALLOWED_BASE_PATHS[base_path], path)
+    
+    try:
+        items = [{
+            'name': d,
+            'path': os.path.join(path, d),
+            'isDirectory': True
+        } for d in os.listdir(full_path) if os.path.isdir(os.path.join(full_path, d))]
+        
+        return jsonify({'directories': items})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500

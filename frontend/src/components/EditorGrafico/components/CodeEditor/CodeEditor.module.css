@@ -1,0 +1,58 @@
+.editorWrapper {
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.editorContainer {
+    flex: 1;
+    overflow: hidden;
+}
+
+.loadingEditor {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(30, 30, 30, 0.7);
+    z-index: 10;
+    color: #e0e0e0;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.loadingEditor i {
+    font-size: 24px;
+}
+
+.statusBar {
+    background-color: #007acc;
+    color: white;
+    padding: 4px 8px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    font-family: monospace;
+}
+
+.saveButton {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+}
+
+.saveButton:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}

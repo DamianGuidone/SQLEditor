@@ -1,0 +1,73 @@
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+    background-color: #252526;
+    border-top: 1px solid #1e1e1e;
+}
+
+.variables {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.variableTag {
+    background-color: #37373d;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.variableTag button {
+    background: none;
+    border: none;
+    color: #858585;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+}
+
+.variableTag button:hover {
+    color: #f48771;
+}
+
+.inputGroup {
+    display: flex;
+    gap: 4px;
+}
+
+.inputGroup input {
+    flex: 1;
+    background-color: #3c3c3c;
+    border: 1px solid #3c3c3c;
+    color: #e0e0e0;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.inputGroup input:focus {
+    outline: none;
+    border-color: #007acc;
+}
+
+.executeButton {
+    background-color: #007acc;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    justify-content: center;
+}
+
+.executeButton:hover {
+    background-color: #0062a3;
+}

@@ -1,0 +1,73 @@
+.editorContainer {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+.tabBar {
+    display: flex;
+    background-color: #252526;
+    border-bottom: 1px solid #1e1e1e;
+    overflow-x: auto;
+}
+
+.tab {
+    padding: 8px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-right: 1px solid #1e1e1e;
+    user-select: none;
+    position: relative;
+}
+
+.tab:hover {
+    background-color: #2a2d2e;
+}
+
+.tab.active {
+    background-color: #1e1e1e;
+    color: #ffffff;
+}
+
+.unsavedDot {
+    color: #569cd6;
+    font-weight: bold;
+}
+
+.closeTab {
+    background: none;
+    border: none;
+    color: #858585;
+    cursor: pointer;
+    padding: 0 4px;
+    border-radius: 4px;
+}
+
+.closeTab:hover {
+    background-color: #3c3c3c;
+    color: #ffffff;
+}
+
+.tabContent {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+}
+
+.noTabs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #858585;
+    gap: 16px;
+}
+
+.noTabs p {
+    margin: 0;
+}
