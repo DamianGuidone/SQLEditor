@@ -35,7 +35,6 @@ export interface FileOperationParams {
 }
 
 export interface FileExplorerContextType {
-    _fetchDirectoryContents: any;
     // Estado del explorador
     currentDirectory: string;
     currentBasePath: string;
@@ -48,7 +47,7 @@ export interface FileExplorerContextType {
     selectBasePath: (basePath: string) => void;
     refreshDirectory: () => void;
     performFileOperation: (params: FileOperationParams) => Promise<boolean>;
-    fetchDirectoryContents: (path: string) => Promise<FileSystemItem[]>;
+    fetchDirectoryContents: (basePath: string, path: string) => Promise<FileSystemItem[]>;
     
     // Favoritos
     favorites: FavoriteItem[];
@@ -69,5 +68,7 @@ export interface FileExplorerContextType {
     setSelectedFile: (path: string | null) => void;
     showPicker: boolean;
     setShowPicker: (show: boolean) => void;
-    handleDirectorySelect: (basePath: string, initialPath: string) => void;
+    handleDirectorySelect: (basePath: string, initialPath?: string) => void;
+    forceDirectorySelection: boolean;
+    setForceDirectorySelection: (value: boolean) => void;
 }

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { FileSystemItem } from '../../types/explorerTypes';
 import styles from './DirectoryTree.module.css';
 import FileItem from '../FileItem/FileItem';
@@ -12,15 +12,23 @@ interface DirectoryTreeProps {
 const DirectoryTree: React.FC<DirectoryTreeProps> = ({ item, level = 0 }) => {
     const [expanded, setExpanded] = useState(false);
     const [children, setChildren] = useState<FileSystemItem[]>([]);
-    const { navigateToDirectory, fetchDirectoryContents } = useFileExplorerContext();
+    const { navigateToDirectory, fetchDirectoryContents, currentBasePath } = useFileExplorerContext();
+    const [loading, setLoading] = useState(false);
 
-    const handleToggle = async () => {
+    const handleToggle = useCallback(async () => {
         if (!expanded) {
-            const contents = await fetchDirectoryContents(item.path);
-            setChildren(contents);
+            setLoading(true);
+            try {
+                const contents = await fetchDirectoryContents(currentBasePath, item.path);
+                setChildren(contents);
+            } catch (error) {
+                console.error("Error loading directory contents:", error);
+            } finally {
+                setLoading(false);
+            }
         }
         setExpanded(!expanded);
-    };
+    }, [expanded, currentBasePath, item.path, fetchDirectoryContents]);
 
     return (
         <div className={styles.treeItem} style={{ paddingLeft: `${level * 12}px` }}>

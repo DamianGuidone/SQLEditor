@@ -4,9 +4,10 @@ import styles from './ShowDirectoryPicker.module.css';
 
 interface ShowDirectoryPickerProps {
     onDirectorySelect: (basePath: string, initialPath?: string) => void;
+    onCancel?: () => void;
 }
 
-const ShowDirectoryPicker: React.FC<ShowDirectoryPickerProps> = ({ onDirectorySelect }) => {
+const ShowDirectoryPicker: React.FC<ShowDirectoryPickerProps> = ({ onDirectorySelect, onCancel }) => {
     const [availableDirectories, setAvailableDirectories] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -75,8 +76,17 @@ const ShowDirectoryPicker: React.FC<ShowDirectoryPickerProps> = ({ onDirectorySe
 
     return (
         <div className={styles.pickerContainer}>
-        <h2 className={styles.title}>Select Working Directory</h2>
-        
+            <div className={styles.header}>
+                <h2 className={styles.title}>Select Working Directory</h2>
+                {onCancel && (
+                    <button 
+                        className={styles.closeButton}
+                        onClick={onCancel}
+                    >
+                        <i className="fas fa-times"></i>
+                    </button>
+                )}
+            </div>
         <div className={styles.options}>
             <div 
             className={`${styles.dropArea} ${dragActive ? styles.active : ''}`}

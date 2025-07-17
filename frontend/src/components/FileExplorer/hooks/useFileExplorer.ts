@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
-import apiClient from '../../../services/api';
-import { FileSystemItem, DirectoryContents, FileOperation, FileOperationParams } from '../types/explorerTypes';
+import { useCallback, useEffect, useState } from "react";
+import apiClient, { getDirectoryContents } from "../../../services/api";
+import { DirectoryContents, FileOperationParams, FileSystemItem } from "../types/explorerTypes";
 
 const useFileExplorer = () => {
     const [currentBasePath, setCurrentBasePath] = useState<string>('');
@@ -12,46 +12,53 @@ const useFileExplorer = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
-    const fetchDirectoryContents = useCallback(async (basePath: string, path: string) => {
+    const fetchDirectoryContents = useCallback(async (basePath: string, path: string): Promise<FileSystemItem[]> => {
         setLoading(true);
         setError(null);
-        
         try {
-        const response = await apiClient.get('/api/files', {
-            params: { path }
-        });
-        
-        const items = response.data.files || [];
-        
-        const contents: DirectoryContents = {
-            directories: items.filter((item: FileSystemItem) => item.isDirectory),
-            files: items.filter((item: FileSystemItem) => !item.isDirectory)
-        };
-        
-        setDirectoryContents(contents);
-        localStorage.setItem('lastBasePath', basePath);
-        localStorage.setItem('lastDirectory', path);
-        } catch (err) {
-            setError('Failed to load directory contents');
-            console.error('Error fetching directory contents:', err);
+            const items = await getDirectoryContents(basePath, path);
+            
+            // Transformar la respuesta si es necesario
+            return items.map(item => ({
+                ...item,
+                path: item.path.replace(/\\/g, '/') // Normalizar rutas
+            }));
+        } catch (error) {
+            setError(`Error al cargar el directorio: ${error}`);
+            console.error('Error fetching directory contents:', {
+                basePath,
+                path,
+                error
+            });
+            return [];
         } finally {
             setLoading(false);
         }
     }, []);
 
+    // Nueva función para cargar y actualizar el estado
+    const loadAndSetDirectoryContents = useCallback(async (basePath: string, path: string) => {
+        const items = await fetchDirectoryContents(basePath, path);
+        setDirectoryContents({
+            directories: items.filter(item => item.isDirectory),
+            files: items.filter(item => !item.isDirectory)
+        });
+    }, [fetchDirectoryContents]);
+
     const selectBasePath = useCallback((basePath: string) => {
         setCurrentBasePath(basePath);
         setCurrentDirectory('');
-    }, []);
+        loadAndSetDirectoryContents(basePath, '');
+    }, [loadAndSetDirectoryContents]);
 
     const navigateToDirectory = useCallback((path: string) => {
         setCurrentDirectory(path);
-        fetchDirectoryContents(currentBasePath, path);
-    }, [currentBasePath, fetchDirectoryContents]);
+        loadAndSetDirectoryContents(currentBasePath, path);
+    }, [currentBasePath, loadAndSetDirectoryContents]);
 
     const refreshDirectory = useCallback(() => {
-        fetchDirectoryContents(currentBasePath, currentDirectory);
-    }, [currentBasePath, currentDirectory, fetchDirectoryContents]);
+        loadAndSetDirectoryContents(currentBasePath, currentDirectory);
+    }, [currentBasePath, currentDirectory, loadAndSetDirectoryContents]);
 
     const performFileOperation = useCallback(async (params: FileOperationParams): Promise<boolean> => {
         try {
@@ -59,7 +66,7 @@ const useFileExplorer = () => {
             const response = await apiClient.post('/api/operations', params);
             
             if (response.data.success) {
-                refreshDirectory();
+                await refreshDirectory();
                 return true;
             }
             return false;
@@ -72,8 +79,9 @@ const useFileExplorer = () => {
         }
     }, [refreshDirectory]);
 
+    // Efecto para cargar el directorio cuando cambia el basePath
     useEffect(() => {
-        if (currentBasePath && currentDirectory !== undefined) {
+        if (currentBasePath) {
             fetchDirectoryContents(currentBasePath, currentDirectory);
         }
     }, [currentBasePath, currentDirectory, fetchDirectoryContents]);
@@ -88,7 +96,9 @@ const useFileExplorer = () => {
         selectBasePath,
         refreshDirectory,
         performFileOperation,
-        fetchDirectoryContents,
+        fetchDirectoryContents, // Ahora retorna Promise<FileSystemItem[]>
+        loadAndSetDirectoryContents, // Nueva función para uso interno
+        setError,
     };
 };
 

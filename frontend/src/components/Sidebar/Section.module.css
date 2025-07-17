@@ -1,0 +1,46 @@
+/* Componente Section */
+.section {
+    border-bottom: 1px solid #444;
+}
+
+.sectionHeader {
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    background-color: #252526;
+}
+
+.sectionHeader i {
+    margin-right: 8px;
+    color: #858585;
+}
+
+.sectionTitle {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #858585;
+}
+
+.sectionContent {
+    overflow-y: auto;
+    max-height: 200px; /* Altura ajustable */
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #2d2d2d;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #4d4d4d;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #5d5d5d;
+}

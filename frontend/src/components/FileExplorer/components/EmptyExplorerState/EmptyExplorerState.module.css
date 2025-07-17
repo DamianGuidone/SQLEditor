@@ -1,0 +1,52 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 20px;
+    text-align: center;
+}
+
+.content {
+    max-width: 300px;
+}
+
+.icon {
+    font-size: 48px;
+    color: #4dabf7;
+    margin-bottom: 16px;
+}
+
+.title {
+    color: #343a40;
+    margin-bottom: 8px;
+}
+
+.text {
+    color: #6c757d;
+    margin-bottom: 20px;
+}
+
+.button {
+    background: #4dabf7;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s;
+}
+
+.button:hover {
+    background: #339af0;
+}
+
+.orText {
+    color: #adb5bd;
+    margin: 16px 0;
+    font-size: 14px;
+}

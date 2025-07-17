@@ -1,6 +1,7 @@
 // frontend/src/services/api.ts
 import axios, { AxiosProgressEvent, InternalAxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import '../components/types/apiTypes';
+import { FileSystemItem } from '../components/FileExplorer/types/explorerTypes';
 
 // Crear instancia de axios con tipos correctos
 const apiClient = axios.create({
@@ -83,6 +84,30 @@ export const downloadFile = async (path: string): Promise<Blob> => {
     responseType: 'blob',
   });
   return response.data;
+};
+
+
+export const getDirectoryContents = async (basePath: string, path: string): Promise<FileSystemItem[]> => {
+    try {
+        // Verifica si el path está vacío para evitar doble barra
+        const apiPath = path ? `${basePath}/${path}` : basePath;
+        
+        const response = await apiClient.get('/api/files', {
+            params: {
+                path: apiPath
+            }
+        });
+        
+        // Asegúrate que la respuesta coincide con tu backend
+        return response.data.files || [];
+    } catch (error) {
+        console.error('API Error fetching directory contents:', {
+            basePath,
+            path,
+            error
+        });
+        throw error;
+    }
 };
 
 export default apiClient;

@@ -5,6 +5,7 @@ interface AccordionSectionProps {
     title: string;
     defaultExpanded?: boolean;
     children: React.ReactNode;
+    headerActions?: React.ReactNode;
 }
 
 const AccordionSection: React.FC<AccordionSectionProps> = ({ 

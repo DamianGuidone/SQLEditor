@@ -6,23 +6,25 @@ import { useFileExplorerContext } from '../../contexts/FileExplorerContext';
 
 interface DirectoryItemProps {
     item: FileSystemItem;
-    onClick: () => void;
     isExpanded: boolean;
     onToggleExpand: () => void;
     isFavorite?: boolean;
 }
 
 const DirectoryItem: React.FC<DirectoryItemProps> = ({ 
-    item, 
-    onClick, 
+    item,  
     isExpanded, 
     onToggleExpand,
     isFavorite = false
-    }) => {
-    const { addFavorite, removeFavorite, performFileOperation } = useFileExplorerContext();    
+}) => {
+    const { navigateToDirectory, addFavorite, removeFavorite, performFileOperation } = useFileExplorerContext();    
     const [contextMenuPos, setContextMenuPos] = useState<{x: number, y: number} | null>(null);
     const [newName, setNewName] = useState(item.name);
     const [isRenaming, setIsRenaming] = useState(false);
+
+    const handleClick = () => {
+        navigateToDirectory(item.path);
+    };
 
     const handleContextMenu = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -82,9 +84,9 @@ const DirectoryItem: React.FC<DirectoryItemProps> = ({
 
     return (
         <div 
-        className={styles.directoryItem}
-        onClick={onClick}
-        onContextMenu={handleContextMenu}
+            className={styles.directoryItem}
+            onClick={handleClick}
+            onContextMenu={handleContextMenu}
         >
         <div className={styles.directoryHeader}>
             <button 

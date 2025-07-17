@@ -107,13 +107,17 @@ def get_files():
         items = []
         for item in os.listdir(full_path):
             item_path = os.path.join(full_path, item)
+            rel_path = os.path.relpath(item_path, BASE_DIR).replace('\\', '/')
             items.append({
                 'name': item,
-                'path': os.path.relpath(item_path, BASE_DIR),
+                'path': rel_path,
                 'isDirectory': os.path.isdir(item_path),
                 'type': 'sql' if item.endswith('.sql') else 'sqlg' if item.endswith('.sqlg') else None
             })
-        return jsonify({'files': items, 'currentPath': path})
+        return jsonify({
+            'files': items,
+            'currentPath': path.replace('\\', '/')  # Normalizar para la respuesta
+        })
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

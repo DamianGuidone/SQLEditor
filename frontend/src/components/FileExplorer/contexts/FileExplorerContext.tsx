@@ -1,8 +1,8 @@
-import React, { createContext, useContext, ReactNode, useMemo, useState } from 'react';
-import useFileExplorer from '../hooks/useFileExplorer';
-import useFavorites from '../hooks/useFavorites';
-import useOpenFiles from '../hooks/useOpenFiles';
+import React, { createContext, useContext, ReactNode, useMemo, useState, useEffect } from 'react';
 import { FileExplorerContextType } from '../types/explorerTypes';
+import useFavorites from '../hooks/useFavorites';
+import useFileExplorer from '../hooks/useFileExplorer';
+import useOpenFiles from '../hooks/useOpenFiles';
 
 const FileExplorerContext = createContext<FileExplorerContextType | null>(null);
 
@@ -12,24 +12,55 @@ export const FileExplorerProvider: React.FC<{children: ReactNode}> = ({ children
     const openFiles = useOpenFiles();
     const [showPicker, setShowPicker] = useState(false);
     const [selectedFile, setSelectedFile] = useState<string | null>(null);
+    const [forceDirectorySelection, setForceDirectorySelection] = useState(false);
 
-    /**
-     * Called when a directory is selected from the picker.
-     * Updates the context with the new base path and initial directory.
-     * Also sets showPicker to false to hide the picker.
-     * @param basePath the base path of the directory that was selected
-     * @param initialPath the initial path to navigate to inside the selected directory
-     * @returns void
-     */
-    const handleDirectorySelect = (basePath: string, initialPath: string = '') => {
-        selectBasePath(basePath);
-        navigateToDirectory(initialPath);
-        setShowPicker(false);
+    
+    // Nueva función para manejar la persistencia
+    const handleDirectorySelect = async (basePath: string, initialPath: string = '') => {
+        try {
+            // 1. Guardar en localStorage
+            localStorage.setItem('lastDirectoryPath', basePath);
+            
+            // 2. Actualizar estado
+            fileExplorer.selectBasePath(basePath);
+            fileExplorer.navigateToDirectory(initialPath);
+            
+            // 3. Cerrar el selector
+            setShowPicker(false);
+            setForceDirectorySelection(false);
+            
+            // 4. Refrescar contenido
+            await fileExplorer.refreshDirectory();
+        } catch (error) {
+            console.error("Error selecting directory:", error);
+            fileExplorer.error = "Failed to select directory";
+        }
     };
+
+    // Verificar directorio al iniciar
+    useEffect(() => {
+        const savedPath = localStorage.getItem('lastDirectoryPath');
+        if (!savedPath) {
+            setForceDirectorySelection(true);
+        } else {
+            handleDirectorySelect(savedPath).catch(console.error);
+        }
+    }, []);
 
     const contextValue = useMemo<FileExplorerContextType>(() => ({
         // Estado del explorador
-        ...fileExplorer,
+        currentDirectory: fileExplorer.currentDirectory,
+        currentBasePath: fileExplorer.currentBasePath,
+        directoryContents: fileExplorer.directoryContents,
+        loading: fileExplorer.loading,
+        error: fileExplorer.error,
+        
+        // Funciones del explorador
+        navigateToDirectory: fileExplorer.navigateToDirectory,
+        selectBasePath: fileExplorer.selectBasePath,
+        refreshDirectory: fileExplorer.refreshDirectory,
+        performFileOperation: fileExplorer.performFileOperation,
+        fetchDirectoryContents: fileExplorer.fetchDirectoryContents,
         
         // Favoritos
         favorites: favorites.favorites,
@@ -49,25 +80,15 @@ export const FileExplorerProvider: React.FC<{children: ReactNode}> = ({ children
         showPicker,
         setShowPicker,
         selectedFile,
-        setSelectedFile,
-        
-        _fetchDirectoryContents: fileExplorer.fetchDirectoryContents,
-        get fetchDirectoryContents() {
-            return this._fetchDirectoryContents;
-        },
-        set fetchDirectoryContents(value) {
-            this._fetchDirectoryContents = value;
-        },
-        performFileOperation: fileExplorer.performFileOperation,
-        navigateToDirectory: fileExplorer.navigateToDirectory,
-        selectBasePath: fileExplorer.selectBasePath,
-        refreshDirectory: fileExplorer.refreshDirectory,
-        handleDirectorySelect: handleDirectorySelect
-    }), [fileExplorer, favorites, openFiles, showPicker, selectedFile]);
+        setSelectedFile,      
+        forceDirectorySelection,
+        setForceDirectorySelection,  
+        handleDirectorySelect
+    }), [fileExplorer, favorites, openFiles, showPicker, selectedFile, forceDirectorySelection]);
 
     return (
         <FileExplorerContext.Provider value={contextValue}>
-        {children}
+            {children}
         </FileExplorerContext.Provider>
     );
 };
@@ -79,11 +100,3 @@ export const useFileExplorerContext = () => {
     }
     return context;
 };
-
-function selectBasePath(basePath: string) {
-    throw new Error('Function not implemented.');
-}
-function navigateToDirectory(initialPath: string) {
-    throw new Error('Function not implemented.');
-}
-

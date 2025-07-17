@@ -17,12 +17,10 @@ const App: React.FC = () => {
   const sidebarTabs = [
     {
       icon: <FontAwesomeIcon icon={faFolderOpen} />,
-      children: <div style={{ height: '100vh', padding: '20px' }}>
-                  <h1>Explorador de Archivos</h1>
+      children:
                   <DndProvider backend={HTML5Backend}>
                     <FileExplorer />
                   </DndProvider>
-                </div>
     },
     {
       icon: <FontAwesomeIcon icon={faTerminal} />,

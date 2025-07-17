@@ -25,3 +25,23 @@
     color: #858585;
     padding: 0 4px;
 }
+
+.breadcrumbs {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: #e0e0e0;
+}
+
+.separator {
+    margin: 0 4px;
+    color: #858585;
+}
+
+.part {
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

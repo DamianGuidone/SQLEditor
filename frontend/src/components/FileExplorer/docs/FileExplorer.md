@@ -10,25 +10,3 @@ te paso el plan de acción y el listado de requerimientos para el explorador:
 8. por favor que sea de diseño limpio, líneas suaves preferentemente en modo oscuro para no castigar la vista del usuario.
 9. botones pequeños, no usar palabra en botones(preferentemente usar íconos de fontawesome), que se resalte bien el hover.
 10. y que permita una interacción rápida con otros componentes del aplicativo.
-
-# FileExplorer
-Descripción: Componente principal que gestiona el estado del directorio actual y renderiza los componentes secundarios.
-Props: Ninguna.
-Estado: currentDirectory - almacena el directorio actual.
-
-# DirectoryList
-Descripción: Muestra una lista de archivos y directorios en el directorio actual.
-Props: currentDirectory: El directorio actual a mostrar.
-Estado: items - lista de archivos y directorios.
-
-# FileItem
-Descripción: Representa un archivo individual.
-Props: item: Objeto que representa un archivo.
-
-# DirectoryItem
-Descripción: Representa un directorio individual.
-Props: item: Objeto que representa un directorio.
-
-# ShowDirectoryPicker
-Descripción: Componente que permite al usuario seleccionar un directorio.
-Props: onDirectoryChange: Función que se llama cuando se selecciona un nuevo directorio.
